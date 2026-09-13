@@ -2,61 +2,172 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <meta name="theme-color" content="#0a0a1a" />
-    <meta name="description" content="Academia Stellaris: Destinos Cruzados - Novela Visual Romántica" />
+    <meta name="description" content="Academia Stellaris: Destinos Cruzados - Novela Visual Romántica Interactiva" />
+    <meta name="author" content="Stellaris Studio" />
+    
+    <!-- Android / PWA -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="application-name" content="Academia Stellaris" />
+    
+    <!-- iOS -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Stellaris" />
+    
+    <!-- Windows -->
+    <meta name="msapplication-TileColor" content="#0a0a1a" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    
+    <!-- Seguridad -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    
+    <!-- Orientación forzada vertical para Android -->
+    <meta name="screen-orientation" content="portrait" />
+    
+    <!-- Splash screen nativo -->
+    <meta name="splash-screen" content="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 800'%3E%3Crect fill='%230a0a1a' width='400' height='800'/%3E%3Ctext x='200' y='400' text-anchor='middle' fill='%23c4b5fd' font-size='24' font-family='Georgia'%3E✨ Academia Stellaris%3C/text%3E%3C/svg%3E" />
+    
     <title>Academia Stellaris: Destinos Cruzados</title>
+    
+    <!-- Favicon SVG inline -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%230a0a1a' width='100' height='100' rx='20'/%3E%3Ctext x='50' y='65' text-anchor='middle' font-size='50'%3E✨%3C/text%3E%3C/svg%3E" />
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%230a0a1a' width='100' height='100' rx='20'/%3E%3Ctext x='50' y='65' text-anchor='middle' font-size='50'%3E✨%3C/text%3E%3C/svg%3E" />
+    
     <style>
+      /* Reset y base */
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      
       html, body, #root {
-        margin: 0;
-        padding: 0;
         width: 100%;
         height: 100%;
+        min-height: 100vh;
+        min-height: 100dvh;
+        overflow-x: hidden;
         background: #0a0a1a;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: none;
       }
-      /* Splash screen */
-      .splash {
+      
+      /* Prevenir pull-to-refresh en Android */
+      body {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+      }
+      
+      /* Splash screen nativo */
+      .app-splash {
         position: fixed;
         inset: 0;
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
-        background: linear-gradient(to bottom, #1e1b4b, #3b0764, #0a0a1a);
+        background: linear-gradient(180deg, #1e1b4b 0%, #3b0764 50%, #0a0a1a 100%);
         z-index: 9999;
-        transition: opacity 0.5s;
+        transition: opacity 0.8s ease-out;
       }
-      .splash.hidden { opacity: 0; pointer-events: none; }
-      .splash-text {
+      .app-splash.fade-out {
+        opacity: 0;
+        pointer-events: none;
+      }
+      .splash-icon {
+        font-size: 4rem;
+        animation: splash-pulse 2s ease-in-out infinite;
+      }
+      .splash-title {
         color: #c4b5fd;
-        font-family: Georgia, serif;
+        font-family: Georgia, 'Times New Roman', serif;
         font-size: 1.5rem;
+        margin-top: 1rem;
         text-align: center;
-        animation: pulse 2s infinite;
       }
-      @keyframes pulse {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.5; }
+      .splash-subtitle {
+        color: #8b5cf6;
+        font-family: Georgia, serif;
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+        letter-spacing: 0.2em;
+      }
+      .splash-loader {
+        margin-top: 2rem;
+        width: 120px;
+        height: 3px;
+        background: rgba(139, 92, 246, 0.2);
+        border-radius: 3px;
+        overflow: hidden;
+      }
+      .splash-loader::after {
+        content: '';
+        display: block;
+        width: 40%;
+        height: 100%;
+        background: linear-gradient(90deg, #8b5cf6, #ec4899);
+        border-radius: 3px;
+        animation: splash-load 1.5s ease-in-out infinite;
+      }
+      
+      @keyframes splash-pulse {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.1); opacity: 0.8; }
+      }
+      @keyframes splash-load {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(350%); }
+      }
+      
+      /* Safe area para notch/home indicator */
+      @supports (padding: env(safe-area-inset-top)) {
+        #root {
+          padding-top: env(safe-area-inset-top);
+          padding-bottom: env(safe-area-inset-bottom);
+          padding-left: env(safe-area-inset-left);
+          padding-right: env(safe-area-inset-right);
+        }
       }
     </style>
   </head>
   <body>
     <div id="root">
-      <div class="splash" id="splash">
-        <div class="splash-text">✨<br/>Academia Stellaris<br/><small>Cargando...</small></div>
+      <!-- Splash screen mientras carga React -->
+      <div class="app-splash" id="app-splash">
+        <div class="splash-icon">✨</div>
+        <div class="splash-title">Academia Stellaris</div>
+        <div class="splash-subtitle">DESTINOS CRUZADOS</div>
+        <div class="splash-loader"></div>
       </div>
     </div>
     <script type="module" src="/src/main.tsx"></script>
     <script>
-      // Ocultar splash cuando React monte
+      // Ocultar splash cuando React esté listo
       window.addEventListener('load', () => {
         setTimeout(() => {
-          const splash = document.getElementById('splash');
-          if (splash) splash.classList.add('hidden');
-          setTimeout(() => splash?.remove(), 500);
-        }, 1000);
+          const splash = document.getElementById('app-splash');
+          if (splash) {
+            splash.classList.add('fade-out');
+            setTimeout(() => splash.remove(), 800);
+          }
+        }, 1200);
       });
+      
+      // Prevenir zoom con doble tap en iOS/Android
+      let lastTouchEnd = 0;
+      document.addEventListener('touchend', (event) => {
+        const now = Date.now();
+        if (now - lastTouchEnd <= 300) {
+          event.preventDefault();
+        }
+        lastTouchEnd = now;
+      }, { passive: false });
+      
+      // Prevenir scroll elástico en iOS
+      document.body.addEventListener('touchmove', (e) => {
+        if (!e.target.closest('.overflow-y-auto, .overflow-y-scroll')) {
+          e.preventDefault();
+        }
+      }, { passive: false });
     </script>
   </body>
 </html>
