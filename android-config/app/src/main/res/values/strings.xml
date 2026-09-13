@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Nombre de la aplicación -->
+    <string name="app_name">Academia Stellaris</string>
+    <string name="title_activity_main">Academia Stellaris</string>
+    <string name="package_name">com.stellaris.academia</string>
+    <string name="custom_url_scheme">com.stellaris.academia</string>
+    
+    <!-- Descripción -->
+    <string name="app_description">Novela visual romántica - Academia Stellaris: Destinos Cruzados</string>
+</resources>
