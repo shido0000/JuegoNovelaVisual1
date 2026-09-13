@@ -8,6 +8,7 @@ export interface Character {
   color: string;
   description: string;
   portrait: string; // emoji placeholder
+  image?: string; // URL de imagen del personaje
   affectionThresholds: {
     romance1: number;
     romance2: number;

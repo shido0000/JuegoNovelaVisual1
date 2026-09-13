@@ -224,17 +224,35 @@ export default function GameEngine({
 
     return (
       <div className="absolute bottom-48 left-1/2 -translate-x-1/2 flex flex-col items-center animate-fade-in">
+        {character.image ? (
+          <div className="relative">
+            <div 
+              className="absolute inset-0 rounded-full blur-2xl opacity-50"
+              style={{ backgroundColor: character.color }}
+            />
+            <img 
+              src={character.image}
+              alt={character.name}
+              className="relative w-64 h-64 md:w-80 md:h-80 object-cover rounded-2xl border-4 shadow-2xl"
+              style={{ 
+                borderColor: character.color,
+                boxShadow: `0 0 40px ${character.color}60`
+              }}
+            />
+          </div>
+        ) : (
+          <div 
+            className="w-32 h-32 rounded-full flex items-center justify-center text-6xl border-4 shadow-2xl"
+            style={{ 
+              borderColor: character.color,
+              boxShadow: `0 0 30px ${character.color}40`
+            }}
+          >
+            {character.portrait}
+          </div>
+        )}
         <div 
-          className="w-32 h-32 rounded-full flex items-center justify-center text-6xl border-4 shadow-2xl"
-          style={{ 
-            borderColor: character.color,
-            boxShadow: `0 0 30px ${character.color}40`
-          }}
-        >
-          {character.portrait}
-        </div>
-        <div 
-          className="mt-2 px-4 py-1 rounded-full text-sm font-bold"
+          className="mt-2 px-4 py-1 rounded-full text-sm font-bold backdrop-blur-sm"
           style={{ backgroundColor: `${character.color}30`, color: character.color }}
         >
           {character.name}
